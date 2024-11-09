@@ -1,0 +1,463 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Prompt", sans-serif;
+}
+aside {
+  background-color: linear-gradient(
+    90deg,
+    rgba(73, 161, 57, 1) 10%,
+    rgba(0, 51, 9, 1) 100%
+  );
+  padding: 10px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  padding-top: 2px;
+  gap: 3px;
+  margin-bottom: 0;
+  height: 100vh;
+}
+aside > div {
+  margin: 0;
+}
+img {
+  width: 30px;
+}
+.hospitalText,
+.departmentText {
+  font-size: 25px;
+}
+footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  padding: 15px 0;
+  z-index: 999;
+  color: white;
+  text-align: center;
+}
+header {
+  margin: 5px 15px;
+  background-color: #fff;
+}
+#popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#popuproom {
+  position: absolute;
+  right: 240px;
+  top: 40%;
+}
+.content {
+  box-shadow: 15px 13px 20px #666666;
+}
+#popup div,
+#popuproom div {
+  max-width: 530px;
+  padding: 20px;
+}
+.contentPopup {
+  background-color: #fff;
+  border-radius: 10px;
+  position: absolute;
+  z-index: 999;
+  box-shadow: 8px 9px 20px #38383879;
+}
+section {
+  background-color: #fff;
+  margin: 7px 0px;
+  padding: 15px;
+  border-radius: 0.75rem;
+}
+.Thead {
+  width: 100%;
+}
+.rowThead {
+  background-color: #c0c0c056;
+}
+.rowThead > th {
+  text-align: start;
+  font-weight: 400;
+  font-size: 17px;
+  padding: 5px;
+}
+.rowThead > th > div {
+  display: flex;
+  gap: 3px;
+}
+.contentFlex section {
+  display: flex;
+  justify-content: space-between;
+}
+
+footer {
+  min-height: 20px;
+  width: 100%;
+  padding: 0;
+}
+
+.footerBox {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+  padding: 1px 0;
+}
+
+/* ข้อความเลื่อน */
+#cross {
+  display: inline-block;
+  padding-left: 100%;
+  animation: scroll 20s linear infinite;
+  font-size: 1rem;
+  color: white;
+  display: flex;
+  gap: 40px;
+}
+
+/* การเคลื่อนไหว */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+body {
+  background-color: #dff4f7;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px;
+  border-radius: 0.75rem;
+  margin-bottom: 0;
+}
+
+.logo {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
+.gap-4 {
+  gap: 1rem;
+}
+
+.section-container {
+  margin: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  padding-right: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.section-container h1 {
+  font-size: 2rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.table-header {
+  background-color: #e5e5e5;
+  color: #737373;
+  text-align: left;
+}
+
+.table-header th {
+  padding: 0.5rem 1rem;
+}
+
+.station-box,
+.room-box {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  padding: 10px;
+  padding-left: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 5px;
+}
+.station-box div > h3,
+.room-box div > h3 {
+  color: rgb(17, 40, 102);
+  font-size: 25px;
+  text-align: start;
+}
+.station-box div > p,
+.room-box div > p {
+  font-size: 23px;
+  font-weight: 700;
+  color: rgb(9, 87, 41);
+}
+.Name h3 {
+  color: rgb(17, 40, 102);
+  font-size: 20px;
+  text-align: start;
+}
+.contentPopup {
+  text-align: start;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* bg-orange-500 p-4 w-[100px] h-[100px] text-center items-center flex justify-center rounded-2xl */
+.station-box-number {
+  background-color: #ff7f11;
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  width: 75px;
+  height: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 25px;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+.station-box-number span {
+  font-size: 25px;
+}
+.station-box-number-queue {
+  background-color: #ff7f11;
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: bold;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 30px;
+  justify-content: center;
+  border-radius: 0.5rem;
+}
+
+.footerBox {
+  background-color: #0a4a0d;
+  padding-bottom: 5px;
+  display: flex;
+  position: fixed;
+  font-size: 10px;
+  bottom: 0px;
+}
+
+svg {
+  width: 15px;
+}
+.mainContent {
+  width: 100%;
+}
+table {
+  border-collapse: separate;
+  border-spacing: 0 20px;
+  width: 100%;
+  text-align: start;
+}
+tbody > tr > td {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 20px;
+}
+.w-full {
+  width: 100%;
+}
+tbody tr td {
+  font-size: 18px;
+}
+
+@media screen and (min-width: 3440px) {
+  .w-full {
+    width: 100%;
+  }
+  svg {
+    width: 30px;
+  }
+  aside {
+    padding: 10px;
+    height: auto;
+    border-radius: 1rem;
+    padding-top: 10px;
+    width: 60%;
+  }
+  img {
+    width: 50px;
+  }
+  .hospitalText,
+  .departmentText {
+    font-size: 30px;
+  }
+  header {
+    margin: 10px 15px;
+  }
+  #popup div,
+  #popuproom div {
+    max-width: 800px;
+    padding: 20px;
+  }
+  .rowThead > th {
+    font-size: 20px;
+  }
+  #cross {
+    font-size: 2rem;
+    color: white;
+    display: flex;
+    gap: 40px;
+  }
+  tbody tr td {
+    font-size: 30px;
+  }
+  table {
+    border-collapse: separate;
+    border-spacing: 0 30px;
+    text-align: start;
+    width: 100%;
+  }
+  tbody > tr > td {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+  }
+  .station-box div > h3 {
+    color: rgb(17, 40, 102);
+    font-size: 26px;
+    text-align: center;
+  }
+  .station-box div > p {
+    font-size: 22px;
+    font-weight: 700;
+    color: rgb(9, 87, 41);
+  }
+  .station-box-number {
+    background-color: #ff7f11;
+    color: #fff;
+    font-size: 3rem;
+    text-align: center;
+    font-weight: bold;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 40px;
+    justify-content: center;
+    border-radius: 0.5rem;
+  }
+  .Name h3 {
+    color: rgb(17, 40, 102);
+    font-size: 3.5rem;
+    text-align: start;
+  }
+  .station-box-number-queue {
+    background-color: #ff7f11;
+    color: #fff;
+    font-size: 2.7rem;
+    text-align: center;
+    font-weight: bold;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 55px;
+    justify-content: center;
+    border-radius: 1.5rem;
+  }
+  .contentPopup {
+    text-align: start;
+    background-color: #fff;
+    border-radius: 30px;
+    padding: 5px 30px;
+  }
+}
+
+.contentFlex {
+  display: flex;
+  align-items: start;
+  height: 100%;
+  justify-content: center;
+  padding: 0 15px;
+  gap: 10px;
+}
+
+.contentFlex section {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: start;
+}
+@media screen and (max-width: 1540px) {
+  .Name h3 {
+    color: rgb(17, 40, 102);
+    font-size: 30px;
+    text-align: start;
+  }
+  .station-box-number-queue {
+    font-size: 1.5rem;
+    width: 85px;
+    height: 85px;
+    border-radius: 0.7rem;
+  }
+}
+@media screen and (max-width: 1390px) {
+  .Name h3 {
+    color: rgb(17, 40, 102);
+    font-size: 30px;
+    text-align: start;
+  }
+  .station-box-number-queue {
+    font-size: 1.5rem;
+    width: 85px;
+    height: 85px;
+    border-radius: 0.7rem;
+  }
+  aside {
+    width: 75%;
+  }
+  .rowThead > th {
+    font-size: 15px;
+  }
+  tbody tr td {
+    font-size: 18px;
+  }
+  .station-box div > h3,
+  .room-box div > h3 {
+    color: rgb(17, 40, 102);
+    font-size: 22px;
+    text-align: start;
+  }
+  .station-box div > p,
+  .room-box div > p {
+    font-size: 19px;
+    font-weight: 700;
+    color: rgb(9, 87, 41);
+  }
+  .station-box-number {
+    font-size: 1.2rem;
+    width: 67px;
+    height: 67px;
+  }
+  .station-box-number span {
+    font-size: 22px;
+  }
+}
