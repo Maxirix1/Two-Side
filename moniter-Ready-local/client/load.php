@@ -220,10 +220,6 @@ if ($room) {
                 <td style="' . $color . ' font-weight: 600;">' . htmlspecialchars($r['waitting_time']) . ' นาที</td>
             </tr>   ';
 
-        preg_match('/([A-Z]+)(\d+)/', $rowStation['visit_q_no'], $matchs);
-        $prefix = isset($matchs[1]) ? $matchs[1] : '';
-        $number = isset($matchs[2]) ? $matchs[2] : '';
-
 
     }
 } else {
