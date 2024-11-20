@@ -51,22 +51,14 @@
                         }, 7000);
                     }
 
-
                     updateStation(data.stationData);
                     updateRoom(data.roomData);
-                    // console.log('popupData:', data.popupData);
-                    // popupData(data.popupData);
-
-
                 },
                 error: function (xhr, status, error) {
                     console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
                 }
             });
         }
-
-
-
 
         let lastSpokenText = "";
         let isSpeaking = false;
@@ -88,17 +80,23 @@
                         lastSpokenText = textSpeak;
                         isSpeaking = true;
                         responsiveVoice.speak(textSpeak, "Thai Female", {
+                            onstart: function () {
+                                $('#popup').html(`
+                    <div>
+                        <h2>หมายเลข ${prefix}${numbers.join('')}</h2>
+                        <p>${data.name} ${data.surname} ${data.station}</p>
+                    </div>
+                `).fadeIn();
+                            },
                             onend: function () {
                                 isSpeaking = false;
+                                $('#popup').fadeOut();
                             }
                         });
                     }
                 } else {
                     console.error('ResponsiveVoice.js ไม่พร้อมใช้งาน');
                 }
-
-            } else {
-                // console.error('popupData ไม่มีข้อมูลหรือไม่ใช่อาร์เรย์');
             }
         }
 
