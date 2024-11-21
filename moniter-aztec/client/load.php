@@ -23,40 +23,48 @@ try {
     date_default_timezone_set('Asia/Bangkok');
     $currentDate = date('dmY');
     // $dateTH = date('d') . date('m') . (date('Y') + 543);
-    $dateTH = '07112567';
+    $dateTH = '20112567';
 
-    $department = 'นรีเวช';
-    $departmentRoom = 'ห้องตรวจนรีเวช';
+    $department = 'ทันตกรรม';
+    $departmentRoom = 'ห้องตรวจทันตกรรม';
 
-    $sql = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'รอ' AND department = :department ORDER BY CONVERT(INT, waitting_time) , check_in ASC ";
+    // $sql = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'รอ' AND department = :department ORDER BY CONVERT(INT, waitting_time) , check_in ASC ";
+    $sql = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'รอ' AND department = :department ORDER BY check_in ASC ";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(":date", $dateTH);
     $stmt->bindParam(":department", $department);
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql_ready = "SELECT * FROM visit_info WHERE visit_date = :date AND status_call = '1' ORDER BY visit_time DESC";
+    $sql_ready = "SELECT * FROM visit_info WHERE department = :department and visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
     $stmt_ready = $conn->prepare($sql_ready);
     $stmt_ready->bindParam(":date", $dateTH);
     // $stmt_ready->bindParam(":department", $department);
     $stmt_ready->execute();
     $popup = $stmt_ready->fetch(PDO::FETCH_ASSOC);
 
-    $sql_room = "SELECT * FROM visit_info WHERE visit_date = :date AND department = :departmentRoom AND status = 'รอ' ORDER BY CONVERT(INT, waitting_q) ASC";
+    $sql_popupR = "SELECT * FROM visit_info WHERE department = :departmentRoom and visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
+    $stmt_popupR = $conn->prepare($sql_popupR);
+    $stmt_popupR->bindParam(":date", $dateTH);
+    // $stmt_ready->bindParam(":department", $department);
+    $stmt_popupR->execute();
+    $popupR = $stmt_popupR->fetch(PDO::FETCH_ASSOC);
+
+    $sql_room = "SELECT * FROM visit_info WHERE visit_date = :date AND department = :departmentRoom AND status = 'รอ' ORDER BY check_in ASC";
     $stmt_room = $conn->prepare($sql_room);
     $stmt_room->bindParam(":date", $dateTH);
     $stmt_room->bindParam(":departmentRoom", $departmentRoom);
     $stmt_room->execute();
     $room = $stmt_room->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql_roomR = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'กำลัง'AND department = :departmentRoom ORDER BY station DESC";
+    $sql_roomR = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'กำลัง'AND department = :departmentRoom ORDER BY check_in ASC";
     $stmt_roomR = $conn->prepare($sql_roomR);
     $stmt_roomR->bindParam(":date", $dateTH);
     $stmt_roomR->bindParam(":departmentRoom", $departmentRoom);
     $stmt_roomR->execute();
     $roomR = $stmt_roomR->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql_q = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'กำลัง' AND department = :department ORDER BY station DESC";
+    $sql_q = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'กำลัง' AND department = :department ORDER BY check_in ASC";
     $stmt_q = $conn->prepare($sql_q);
     $stmt_q->bindParam(":department", $department);
     $stmt_q->bindParam(":date", $dateTH);
@@ -154,6 +162,14 @@ if ($cross) {
 
 $popupTable = '';
 
+// $popupRoom = []; 
+
+// if($popupR) {
+//     preg_match('/([A-Z]+)(\d+)/', $popup['visit_q_no'], $matchs);
+//     $prefix = isset($matchs[1]) ? $matchs[1] : '';
+//     $number = isset($matchs[2]) ? $matchs[2] : '';
+// }
+
 $popupData = [];
 
 if ($popup) {
@@ -216,7 +232,7 @@ if ($room) {
         $roomHtml .= '
 <tr style="border-bottom: 1px solid #ddd;">
                 <td style="padding-left: 10px; color:#042e5c; font-weight:600;">' . htmlspecialchars($r['visit_q_no']) . '</td>
-                <td class="px-4 py-4">' . htmlspecialchars($row['name']) . ' ' . htmlspecialchars($r['surname']) . '</td>
+                <td class="px-4 py-4">' . htmlspecialchars($r['name']) . ' ' . htmlspecialchars($r['surname']) . '</td>
                 <td style="' . $color . ' font-weight: 600;">' . htmlspecialchars($r['waitting_time']) . ' นาที</td>
             </tr>   ';
 
