@@ -36,19 +36,20 @@ try {
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql_ready = "SELECT * FROM visit_info WHERE department = :department and visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
+    // $sql_ready = "SELECT * FROM visit_info WHERE department = :department and visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
+    $sql_ready = "SELECT * FROM visit_info WHERE visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
     $stmt_ready = $conn->prepare($sql_ready);
     $stmt_ready->bindParam(":date", $dateTH);
     // $stmt_ready->bindParam(":department", $department);
     $stmt_ready->execute();
     $popup = $stmt_ready->fetch(PDO::FETCH_ASSOC);
 
-    $sql_popupR = "SELECT * FROM visit_info WHERE department = :departmentRoom and visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
-    $stmt_popupR = $conn->prepare($sql_popupR);
-    $stmt_popupR->bindParam(":date", $dateTH);
-    // $stmt_ready->bindParam(":department", $department);
-    $stmt_popupR->execute();
-    $popupR = $stmt_popupR->fetch(PDO::FETCH_ASSOC);
+    // $sql_popupR = "SELECT * FROM visit_info WHERE department = :departmentRoom and visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
+    // $stmt_popupR = $conn->prepare($sql_popupR);
+    // $stmt_popupR->bindParam(":date", $dateTH);
+    // // $stmt_ready->bindParam(":department", $department);
+    // $stmt_popupR->execute();
+    // $popupR = $stmt_popupR->fetch(PDO::FETCH_ASSOC);
 
     $sql_room = "SELECT * FROM visit_info WHERE visit_date = :date AND department = :departmentRoom AND status = 'รอ' ORDER BY check_in ASC";
     $stmt_room = $conn->prepare($sql_room);
