@@ -10,9 +10,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=y8x4yCdX"></script>
     <script>
-        let lastPopupData = '';
         let lastSpokenText = "";
         let isSpeaking = false;
+        let currentPopupId = null;
 
         function loadData() {
             $.ajax({
@@ -21,34 +21,18 @@
                 dataType: 'json',
                 success: function (data) {
                     $('#historyTable').html(data.historyHtml);
-                    $('#popupTable').html(data.popupTable); // อัปเดตข้อมูลใน popupTable
                     $('#roomTable').html(data.roomHtml);
                     $('#popupRoom').html(data.popupRoom);
                     $('#waitroom').html(data.waitR);
                     $('#cross').html(data.crossData);
 
-                    if (data.popupTable && data.popupTable !== lastPopupData) {
-                        lastPopupData = data.popupTable;
-
+                    if (data.popupData && data.popupData.length > 0) {
                         popupData(data.popupData);
-
-                        setTimeout(function () {
-                            $('#popupTable').fadeOut();
-                            $.ajax({
-                                url: 'updateStatusHome.php',
-                                type: 'POST',
-                                data: {
-                                    status_call: '2',
-                                    id: data.popupData[0]?.id
-                                },
-                                success: function (response) {
-                                    console.log('Success update status:', response);
-                                },
-                                error: function (xhr, status, error) {
-                                    console.error('Error updating status:', error);
-                                }
-                            });
-                        }, 7000);
+                    } else {
+                        if (currentPopupId !== null) {
+                            $('#popupTable').empty();
+                            currentPopupId = null;
+                        }
                     }
 
                     updateStation(data.stationData);
@@ -64,46 +48,64 @@
             if (Array.isArray(popupData) && popupData.length > 0) {
                 const data = popupData[0];
 
-                const visitQNo = data.visit_q_no;
-                const prefix = visitQNo.charAt(0);
-                const numberPart = visitQNo.slice(1);
+                if (currentPopupId !== data.id) {
+                    currentPopupId = data.id; 
 
-                const numbers = numberPart.split('').map(num => num); // ['2', '5', '6']
+                    const visitQNo = data.visit_q_no;
+                    const prefix = visitQNo.charAt(0);
+                    const numberPart = visitQNo.slice(1);
+                    const numbers = numberPart.split('').map(num => num); // ['2', '5', '6']
 
-                const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')}  คุณ  ${data.name} ${data.surname} ${data.station} ค่ะ`;
+                    const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')}  คุณ  ${data.name} ${data.surname} ${data.station} ค่ะ`;
 
-                // แสดง popup HTML ทันทีที่เริ่ม
-                $('#popupTable').html(`
-            <div class="contentPopup" id="popup">
-            <div class="Name">
-                <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
-                <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
-            </div>
+                    console.log("ข้อความที่จะพูด:", textSpeak);
 
-            <div class="station-box-number-queue">
-                <h1 class="text-white text-3xl font-bold"><span class="text-4xl">${prefix}</span><br>${numbers.join('')}</h1>
-            </div>
-    </div>
-        `).fadeIn();
+                    // อัปเดตข้อมูลใน popupTable
+                    $('#popupTable').html(`
+                <div class="contentPopup" id="popup">
+                    <div class="Name">
+                        <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
+                        <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
+                    </div>
+                    <div class="station-box-number-queue">
+                        <h1 class="text-white text-3xl font-bold"><span class="text-4xl">${prefix}</span><br>${numbers.join('')}</h1>
+                    </div>
+                </div>
+            `);
 
-                if (typeof responsiveVoice !== 'undefined') {
-                    if (textSpeak !== lastSpokenText && !isSpeaking) {
-                        lastSpokenText = textSpeak;
-                        isSpeaking = true;
+                    if (typeof responsiveVoice !== 'undefined') {
+                        if (!isSpeaking) {
+                            isSpeaking = true;
+                            responsiveVoice.speak(textSpeak, "Thai Female", {
+                                onend: function () {
+                                    isSpeaking = false; 
+                                }
+                            });
+                            lastSpokenText = textSpeak;
+                        }
+                    } else {
+                        console.error('ResponsiveVoice.js ไม่พร้อมใช้งาน');
+                    }
 
-                        // พูดข้อความ
-                        responsiveVoice.speak(textSpeak, "Thai Female", {
-                            onend: function () {
-                                isSpeaking = false;
+                    setTimeout(function () {
+                        $.ajax({
+                            url: 'updateStatusHome.php',
+                            type: 'POST',
+                            data: {
+                                status_call: '2',
+                                id: data.id
+                            },
+                            success: function (response) {
+                                console.log('อัปเดตสถานะสำเร็จ:', response);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error updating status:', error);
                             }
                         });
-                    }
-                } else {
-                    console.error('ResponsiveVoice.js ไม่พร้อมใช้งาน');
+                    }, 7000);
                 }
             }
         }
-
 
         function updateStation(stationData) {
             document.querySelectorAll('.station-box').forEach(box => {
@@ -145,10 +147,9 @@
             });
         }
 
-
         $(document).ready(function () {
             loadData();
-            setInterval(loadData, 1000);
+            setInterval(loadData, 1000); // ดึงข้อมูลทุกๆ 1 วินาที
         });
 
 
