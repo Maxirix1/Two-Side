@@ -11,6 +11,8 @@
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=y8x4yCdX"></script>
     <script>
         let lastPopupData = '';
+        let lastSpokenText = "";
+        let isSpeaking = false;
 
         function loadData() {
             $.ajax({
@@ -19,7 +21,7 @@
                 dataType: 'json',
                 success: function (data) {
                     $('#historyTable').html(data.historyHtml);
-                    $('#popupTable').html(data.popupTable);
+                    $('#popupTable').html(data.popupTable); // อัปเดตข้อมูลใน popupTable
                     $('#roomTable').html(data.roomHtml);
                     $('#popupRoom').html(data.popupRoom);
                     $('#waitroom').html(data.waitR);
@@ -30,10 +32,8 @@
 
                         popupData(data.popupData);
 
-                        $('#popupTable').html(data.popupTable).fadeIn();
                         setTimeout(function () {
                             $('#popupTable').fadeOut();
-
                             $.ajax({
                                 url: 'updateStatusHome.php',
                                 type: 'POST',
@@ -60,9 +60,6 @@
             });
         }
 
-        let lastSpokenText = "";
-        let isSpeaking = false;
-
         function popupData(popupData) {
             if (Array.isArray(popupData) && popupData.length > 0) {
                 const data = popupData[0];
@@ -75,22 +72,29 @@
 
                 const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')}  คุณ  ${data.name} ${data.surname} ${data.station} ค่ะ`;
 
+                // แสดง popup HTML ทันทีที่เริ่ม
+                $('#popupTable').html(`
+            <div class="contentPopup" id="popup">
+            <div class="Name">
+                <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
+                <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
+            </div>
+
+            <div class="station-box-number-queue">
+                <h1 class="text-white text-3xl font-bold"><span class="text-4xl">${prefix}</span><br>${numbers.join('')}</h1>
+            </div>
+    </div>
+        `).fadeIn();
+
                 if (typeof responsiveVoice !== 'undefined') {
                     if (textSpeak !== lastSpokenText && !isSpeaking) {
                         lastSpokenText = textSpeak;
                         isSpeaking = true;
+
+                        // พูดข้อความ
                         responsiveVoice.speak(textSpeak, "Thai Female", {
-                            onstart: function () {
-                                $('#popup').html(`
-                    <div>
-                        <h2>หมายเลข ${prefix}${numbers.join('')}</h2>
-                        <p>${data.name} ${data.surname} ${data.station}</p>
-                    </div>
-                `).fadeIn();
-                            },
                             onend: function () {
                                 isSpeaking = false;
-                                $('#popup').fadeOut();
                             }
                         });
                     }
@@ -99,6 +103,7 @@
                 }
             }
         }
+
 
         function updateStation(stationData) {
             document.querySelectorAll('.station-box').forEach(box => {

@@ -23,7 +23,7 @@ try {
     date_default_timezone_set('Asia/Bangkok');
     $currentDate = date('dmY');
     // $dateTH = date('d') . date('m') . (date('Y') + 543);
-    $dateTH = '20112567';
+    $dateTH = '22112567';
 
     $department = 'ทันตกรรม';
     $departmentRoom = 'ห้องตรวจทันตกรรม';
@@ -162,15 +162,6 @@ if ($cross) {
 }
 
 $popupTable = '';
-
-// $popupRoom = []; 
-
-// if($popupR) {
-//     preg_match('/([A-Z]+)(\d+)/', $popup['visit_q_no'], $matchs);
-//     $prefix = isset($matchs[1]) ? $matchs[1] : '';
-//     $number = isset($matchs[2]) ? $matchs[2] : '';
-// }
-
 $popupData = [];
 
 if ($popup) {
@@ -180,9 +171,7 @@ if ($popup) {
 
     $popupTable .= '<div class="contentPopup" id="popup">
             <div class="Name">
-                <h3 style="
-  color: rgb(9, 87, 41);
-                ">' . htmlspecialchars($popup['station']) . '</h3>
+                <h3 style="color: rgb(9, 87, 41);">' . htmlspecialchars($popup['station']) . '</h3>
                 <h3 class="text-4xl font-semibold mt-2">' . htmlspecialchars($popup['name']) . ' ' . htmlspecialchars($popup['surname']) . '</h3>
             </div>
 
