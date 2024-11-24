@@ -43,26 +43,27 @@
                 }
             });
         }
-
         function popupData(popupData) {
             if (Array.isArray(popupData) && popupData.length > 0) {
                 const data = popupData[0];
 
+                // แสดง popup ใหม่เฉพาะเมื่อ ID ไม่ตรงกับ popup ที่กำลังแสดงอยู่
                 if (currentPopupId !== data.id) {
-                    currentPopupId = data.id; 
+                    currentPopupId = data.id; // บันทึก ID ของ popup ที่กำลังแสดง
 
                     const visitQNo = data.visit_q_no;
                     const prefix = visitQNo.charAt(0);
                     const numberPart = visitQNo.slice(1);
-                    const numbers = numberPart.split('').map(num => num); // ['2', '5', '6']
+                    const numbers = numberPart.split('').map(num => num);
 
                     const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')}  คุณ  ${data.name} ${data.surname} ${data.station} ค่ะ`;
 
                     console.log("ข้อความที่จะพูด:", textSpeak);
 
-                    // อัปเดตข้อมูลใน popupTable
+                    const popupPositionClass = data.department === 'ทันตกรรม' ? 'popup-left' : 'popup-default';
+
                     $('#popupTable').html(`
-                <div class="contentPopup" id="popup">
+                <div class="contentPopup ${popupPositionClass}" id="popup">
                     <div class="Name">
                         <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
                         <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
@@ -73,12 +74,13 @@
                 </div>
             `);
 
+                    // พูดข้อความ
                     if (typeof responsiveVoice !== 'undefined') {
                         if (!isSpeaking) {
                             isSpeaking = true;
                             responsiveVoice.speak(textSpeak, "Thai Female", {
                                 onend: function () {
-                                    isSpeaking = false; 
+                                    isSpeaking = false;
                                 }
                             });
                             lastSpokenText = textSpeak;
@@ -106,6 +108,7 @@
                 }
             }
         }
+
 
         function updateStation(stationData) {
             document.querySelectorAll('.station-box').forEach(box => {

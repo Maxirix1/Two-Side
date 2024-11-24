@@ -171,7 +171,7 @@ if ($popup) {
 
     $popupTable .= '<div class="contentPopup" id="popup">
             <div class="Name">
-                <h3 style="color: rgb(9, 87, 41);">' . htmlspecialchars($popup['station']) . '</h3>
+                <h3 style="color: #f71e0f;">' . htmlspecialchars($popup['station']) . '</h3>
                 <h3 class="text-4xl font-semibold mt-2">' . htmlspecialchars($popup['name']) . ' ' . htmlspecialchars($popup['surname']) . '</h3>
             </div>
 
@@ -186,6 +186,7 @@ if ($popup) {
         'name' => $popup['name'],
         'surname' => $popup['surname'],
         'visit_q_no' => $popup['visit_q_no'],
+        'department' => $popup['department'],
     ];
 }
 

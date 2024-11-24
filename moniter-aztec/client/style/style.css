@@ -5,6 +5,7 @@
   padding: 0;
   font-family: "Prompt", sans-serif;
 }
+
 aside {
   background-color: linear-gradient(
     90deg,
@@ -44,12 +45,12 @@ header {
   margin: 5px 15px;
   background-color: #fff;
 }
-#popup {
+/* #popup {
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-}
+} */
 #popuproom {
   position: absolute;
   right: 240px;
@@ -460,4 +461,16 @@ tbody tr td {
   .station-box-number span {
     font-size: 22px;
   }
+}
+
+.popup-left {
+  top: 50%;
+  left: 25%;
+  transform: translate(-15%, -40%);
+}
+
+.popup-default {
+  top: 50%;
+  right: 15%;
+  transform: translate(-15%, -40%);
 }

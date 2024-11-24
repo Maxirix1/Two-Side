@@ -49,7 +49,7 @@
                 const data = popupData[0];
 
                 if (currentPopupId !== data.id) {
-                    currentPopupId = data.id; 
+                    currentPopupId = data.id;
 
                     const visitQNo = data.visit_q_no;
                     const prefix = visitQNo.charAt(0);
@@ -78,7 +78,7 @@
                             isSpeaking = true;
                             responsiveVoice.speak(textSpeak, "Thai Female", {
                                 onend: function () {
-                                    isSpeaking = false; 
+                                    isSpeaking = false;
                                 }
                             });
                             lastSpokenText = textSpeak;

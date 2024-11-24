@@ -197,6 +197,7 @@ if ($popup) {
         'name' => $popup['name'],
         'surname' => $popup['surname'],
         'visit_q_no' => $popup['visit_q_no'],
+        'department' => $popup['department'],
     ];
 }
 
