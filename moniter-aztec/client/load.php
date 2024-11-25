@@ -37,10 +37,11 @@ try {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // $sql_ready = "SELECT * FROM visit_info WHERE department = :department and visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
-    $sql_ready = "SELECT * FROM visit_info WHERE visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
+    // $sql_ready = "SELECT * FROM visit_info WHERE visit_date = :date AND status_call = '1' ORDER BY check_in ASC";
+    $sql_ready = "SELECT * FROM visit_info WHERE visit_date = :date AND status_call = '1' ORDER BY time_call ASC";
+    // $sql_ready = "SELECT * FROM visit_info WHERE visit_date = :date AND status_call = '1'";
     $stmt_ready = $conn->prepare($sql_ready);
     $stmt_ready->bindParam(":date", $dateTH);
-    // $stmt_ready->bindParam(":department", $department);
     $stmt_ready->execute();
     $popup = $stmt_ready->fetch(PDO::FETCH_ASSOC);
 
@@ -72,25 +73,25 @@ try {
     $stmt_q->execute();
     $row_q = $stmt_q->fetchAll(PDO::FETCH_ASSOC);
 
-    $sql_cross = "SELECT * FROM visit_info WHERE status = 'ข้าม'";
+    $sql_cross = "SELECT * FROM visit_info WHERE visit_date = :date AND status = 'ข้าม'";
     $stmt_cross = $conn->prepare($sql_cross);
+    $stmt_cross->bindParam(":date", $dateTH);
     $stmt_cross->execute();
     $cross = $stmt_cross->fetchAll(PDO::FETCH_ASSOC);
 
     usort($rows, function ($a, $b) use ($preferredLetters) {
-        $aPrefix = preg_replace('/\d+/', '', $a['visit_q_no']); // ตัดเฉพาะตัวอักษร
+        $aPrefix = preg_replace('/\d+/', '', $a['visit_q_no']);
         $bPrefix = preg_replace('/\d+/', '', $b['visit_q_no']);
 
         $aIndex = array_search($aPrefix, $preferredLetters);
         $bIndex = array_search($bPrefix, $preferredLetters);
 
-        // จัดเรียงตามลำดับที่ตั้งค่า
         if ($aIndex === false)
-            $aIndex = count($preferredLetters); // ถ้าไม่เจอใน preferredLetters ให้ไปอยู่ท้าย
+            $aIndex = count($preferredLetters);
         if ($bIndex === false)
             $bIndex = count($preferredLetters);
 
-        return $aIndex <=> $bIndex; // เรียงตามลำดับที่ตั้งค่า
+        return $aIndex <=> $bIndex;
     });
 
     $stationData = [];

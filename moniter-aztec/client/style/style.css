@@ -209,7 +209,8 @@ header {
 }
 .Name h3 {
   color: rgb(17, 40, 102);
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: 2rem;
   text-align: start;
 }
 .contentPopup {
@@ -243,15 +244,15 @@ header {
 .station-box-number-queue {
   background-color: #ff7f11;
   color: #fff;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   text-align: center;
   font-weight: bold;
-  width: 70px;
-  height: 70px;
+  width: 120px;
+  height: 120px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 30px;
+  line-height: 35px;
   justify-content: center;
   border-radius: 0.5rem;
 }
@@ -360,13 +361,13 @@ tbody tr td {
     display: flex;
     flex-direction: column;
     align-items: center;
-    line-height: 40px;
+    line-height: 30px;
     justify-content: center;
     border-radius: 0.5rem;
   }
   .Name h3 {
     color: rgb(17, 40, 102);
-    font-size: 3.5rem;
+    font-size: 10rem;
     text-align: start;
   }
   .station-box-number-queue {
@@ -380,7 +381,7 @@ tbody tr td {
     display: flex;
     flex-direction: column;
     align-items: center;
-    line-height: 55px;
+    line-height: 15px;
     justify-content: center;
     border-radius: 1.5rem;
   }
@@ -465,12 +466,12 @@ tbody tr td {
 
 .popup-left {
   top: 50%;
-  left: 25%;
+  left: 10%;
   transform: translate(-15%, -40%);
 }
 
 .popup-default {
   top: 50%;
-  right: 15%;
+  right: 10%;
   transform: translate(-15%, -40%);
 }

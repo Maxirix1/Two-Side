@@ -43,71 +43,81 @@
                 }
             });
         }
+
         function popupData(popupData) {
             if (Array.isArray(popupData) && popupData.length > 0) {
-                const data = popupData[0];
+                popupData.forEach(function (data) {
+                    if (currentPopupId !== data.id) {
+                        currentPopupId = data.id;
 
-                // แสดง popup ใหม่เฉพาะเมื่อ ID ไม่ตรงกับ popup ที่กำลังแสดงอยู่
-                if (currentPopupId !== data.id) {
-                    currentPopupId = data.id; // บันทึก ID ของ popup ที่กำลังแสดง
+                        const visitQNo = data.visit_q_no;
+                        const prefix = visitQNo.charAt(0);
+                        const numberPart = visitQNo.slice(1);
+                        const numbers = numberPart.split('').map(num => num);
 
-                    const visitQNo = data.visit_q_no;
-                    const prefix = visitQNo.charAt(0);
-                    const numberPart = visitQNo.slice(1);
-                    const numbers = numberPart.split('').map(num => num);
+                        const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')}  คุณ  ${data.name} ${data.surname} ${data.station} ค่ะ`;
 
-                    const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')}  คุณ  ${data.name} ${data.surname} ${data.station} ค่ะ`;
+                        console.log("ข้อความที่จะพูด:", textSpeak);
 
-                    console.log("ข้อความที่จะพูด:", textSpeak);
+                        const popupPositionClass = data.department === 'ทันตกรรม' ? 'popup-left' : 'popup-default';
 
-                    const popupPositionClass = data.department === 'ทันตกรรม' ? 'popup-left' : 'popup-default';
-
-                    $('#popupTable').html(`
-                <div class="contentPopup ${popupPositionClass}" id="popup">
-                    <div class="Name">
-                        <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
-                        <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
+                        $('#popupTable').html(`
+                    <div class="contentPopup ${popupPositionClass}" id="popup">
+                        <div class="Name">
+                            <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
+                            <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
+                        </div>
+                        <div class="station-box-number-queue">
+                            <h1 class="text-white text-3xl font-bold"><span class="text-4xl">${prefix}</span><br>${numbers.join('')}</h1>
+                        </div>
                     </div>
-                    <div class="station-box-number-queue">
-                        <h1 class="text-white text-3xl font-bold"><span class="text-4xl">${prefix}</span><br>${numbers.join('')}</h1>
-                    </div>
-                </div>
-            `);
+                `);
 
-                    // พูดข้อความ
-                    if (typeof responsiveVoice !== 'undefined') {
-                        if (!isSpeaking) {
-                            isSpeaking = true;
-                            responsiveVoice.speak(textSpeak, "Thai Female", {
-                                onend: function () {
-                                    isSpeaking = false;
+                        speakText(textSpeak);
+
+                        setTimeout(function () {
+                            $.ajax({
+                                url: 'updateStatusHome.php',
+                                type: 'POST',
+                                data: {
+                                    status_call: '2',
+                                    id: data.id
+                                },
+                                success: function (response) {
+                                    console.log('อัปเดตสถานะสำเร็จ:', response);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error updating status:', error);
                                 }
                             });
-                            lastSpokenText = textSpeak;
-                        }
-                    } else {
-                        console.error('ResponsiveVoice.js ไม่พร้อมใช้งาน');
+                        }, 7000);
                     }
-
-                    setTimeout(function () {
-                        $.ajax({
-                            url: 'updateStatusHome.php',
-                            type: 'POST',
-                            data: {
-                                status_call: '2',
-                                id: data.id
-                            },
-                            success: function (response) {
-                                console.log('อัปเดตสถานะสำเร็จ:', response);
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error updating status:', error);
-                            }
-                        });
-                    }, 7000);
-                }
+                });
             }
         }
+
+        function speakText(text) {
+            if (typeof responsiveVoice !== 'undefined') {
+                if (!isSpeaking) {
+                    isSpeaking = true;
+                    responsiveVoice.speak(text, "Thai Female", {
+                        onend: function () {
+                            isSpeaking = false;
+                        },
+                        onerror: function () {
+                            isSpeaking = false;
+                            console.error('เกิดข้อผิดพลาดในการพูด');
+                        }
+                    });
+                    lastSpokenText = text;
+                }
+            } else {
+                console.error('ResponsiveVoice.js ไม่พร้อมใช้งาน');
+            }
+        }
+
+
+
 
 
         function updateStation(stationData) {
