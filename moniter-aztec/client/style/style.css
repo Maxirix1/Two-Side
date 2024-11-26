@@ -244,7 +244,7 @@ header {
 .station-box-number-queue {
   background-color: #ff7f11;
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 2rem;
   text-align: center;
   font-weight: bold;
   width: 120px;
@@ -252,7 +252,7 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 35px;
+  line-height: 45px;
   justify-content: center;
   border-radius: 0.5rem;
 }

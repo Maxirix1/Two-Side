@@ -22,8 +22,8 @@ try {
 
     date_default_timezone_set('Asia/Bangkok');
     $currentDate = date('dmY');
-    // $dateTH = date('d') . date('m') . (date('Y') + 543);
-    $dateTH = '22112567';
+    $dateTH = date('d') . date('m') . (date('Y') + 543);
+    // $dateTH = '22112567';
 
     $department = 'ทันตกรรม';
     $departmentRoom = 'ห้องตรวจทันตกรรม';
