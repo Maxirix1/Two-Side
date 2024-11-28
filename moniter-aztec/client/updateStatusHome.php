@@ -7,8 +7,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         $id = $_POST['id'];
         date_default_timezone_set('Asia/Bangkok');
         $currentDate = date('dmY');
-        $dateTH = date('d') . date('m') . (date('Y') + 543);
-        // $dateTH = '22112567';
+        // $dateTH = date('d') . date('m') . (date('Y') + 543);
+        $dateTH = '26112567';
 
         $sql = "UPDATE visit_info SET status_call = :status_call WHERE id = :id AND visit_date = :dateTH";
         $stmt = $conn->prepare($sql);

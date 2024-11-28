@@ -9,14 +9,18 @@
     <link rel="stylesheet" href="./style/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=y8x4yCdX"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <script>
+
         let lastSpokenText = "";
         let isSpeaking = false;
         let currentPopupId = null;
         let popupQueue = [];
 
         function loadData() {
-            if (isSpeaking) return;
+            if (isSpeaking) return;  // ถ้ากำลังพูดอยู่ ไม่โหลดข้อมูลใหม่
 
             $.ajax({
                 url: 'load.php',
@@ -40,7 +44,6 @@
                     }
 
                     updateStation(data.stationData);
-                    updateRoom(data.roomData);
                 },
                 error: function (xhr, status, error) {
                     console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);
@@ -49,9 +52,9 @@
         }
 
         function processPopupQueue() {
-            if (isSpeaking || popupQueue.length === 0) return;
+            if (isSpeaking || popupQueue.length === 0) return;  // ถ้ากำลังพูดหรือคิวว่างไม่ต้องทำอะไร
 
-            const data = popupQueue.shift();
+            const data = popupQueue.shift();  // ดึงข้อมูลจากคิว
             currentPopupId = data.id;
 
             const visitQNo = data.visit_q_no;
@@ -62,10 +65,8 @@
             const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')} คุณ ${data.name} ${data.surname} ${data.station} ค่ะ`;
             console.log("ข้อความที่จะพูด:", textSpeak);
 
-            const popupPositionClass = data.department === 'ทันตกรรม' ? 'popup-left' : 'popup-default';
-
             $('#popupTable').html(`
-        <div class="contentPopup ${popupPositionClass}" id="popup">
+        <div class="contentPopup" id="popup">
             <div class="Name">
                 <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
                 <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
@@ -80,7 +81,8 @@
         }
 
         function playSpeechWithPopup(text, id) {
-            if (typeof responsiveVoice !== 'undefined') {
+            if (typeof responsiveVoice !== 'undefined' && responsiveVoice.voiceSupport()) {
+                // ใช้ responsiveVoice.js ในกรณีที่รองรับ
                 isSpeaking = true;
                 responsiveVoice.speak(text, "Thai Female", {
                     onstart: function () {
@@ -91,21 +93,45 @@
                         isSpeaking = false;
                         currentPopupId = null;
 
-                        $('#popupTable').empty();
+                        $('#popupTable').empty();  // เคลียร์ popup หลังจากเสียงเสร็จ
 
                         updatePopupStatus(id);
-                        processPopupQueue();
+                        processPopupQueue();  // เรียกคิวถัดไป
                     },
                     onerror: function () {
                         console.error('เกิดข้อผิดพลาดในการพูด');
                         isSpeaking = false;
                         $('#popupTable').empty();
-                        processPopupQueue();
+                        processPopupQueue();  // เรียกคิวถัดไป
                     }
                 });
                 lastSpokenText = text;
             } else {
-                console.error('ResponsiveVoice.js ไม่พร้อมใช้งาน');
+                // หากไม่สามารถใช้ responsiveVoice.js ได้ ให้ใช้ SpeechSynthesis ของเบราว์เซอร์แทน
+                console.warn("ResponsiveVoice.js ไม่พร้อมใช้งาน, ใช้ SpeechSynthesis แทน");
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'th-TH';
+                utterance.onstart = function () {
+                    console.log("SpeechSynthesis เริ่มเล่นเสียง: ", text);
+                    isSpeaking = true;
+                };
+                utterance.onend = function () {
+                    console.log("SpeechSynthesis เล่นเสียงเสร็จสิ้น: ", text);
+                    isSpeaking = false;
+                    currentPopupId = null;
+
+                    $('#popupTable').empty();  // เคลียร์ popup หลังจากเสียงเสร็จ
+
+                    updatePopupStatus(id);
+                    processPopupQueue();  // เรียกคิวถัดไป
+                };
+                utterance.onerror = function () {
+                    console.error('SpeechSynthesis เกิดข้อผิดพลาด');
+                    isSpeaking = false;
+                    $('#popupTable').empty();
+                    processPopupQueue();  // เรียกคิวถัดไป
+                };
+                speechSynthesis.speak(utterance);  // เล่นเสียงผ่าน SpeechSynthesis
             }
         }
 
@@ -167,8 +193,8 @@
         }
 
         $(document).ready(function () {
-            loadData();
-            setInterval(loadData, 3000);
+            loadData();  // เรียกโหลดข้อมูลครั้งแรก
+            setInterval(loadData, 3000);  // อัปเดตทุก 3 วินาที
         });
 
     </script>
@@ -178,7 +204,7 @@
     <header class="flex items-center justify-between m-2 mx-2 p-2 px-6 rounded-xl mb-0">
         <div class="logo">
             <img src="./assets/logo_hospitol.png" alt="">
-            <h1 class="hospitalText">โรงพยาบาล</h1>
+            <h1 class="hospitalText" id="display-text">โรงพยาบาล</h1>
         </div>
         <h1 class="departmentText">แผนก ตรวจทันตกรรม</h1>
     </header>
@@ -498,6 +524,9 @@
     </div>
 
     <footer class="bg-[#0a4a0d] py-2">
+        <div class="crossfooter">
+            <p>รายชื่อที่ข้าม</p>
+        </div>
         <div class="footerBox flex">
             <div class="font-[500] flex" id="cross"></div>
         </div>

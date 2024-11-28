@@ -257,6 +257,13 @@ header {
   border-radius: 0.5rem;
 }
 
+.crossfooter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 27px;
+  background-color: #0a4a0d;
+}
 .footerBox {
   background-color: #0a4a0d;
   padding-bottom: 5px;
