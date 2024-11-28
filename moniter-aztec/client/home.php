@@ -64,9 +64,10 @@
 
             const textSpeak = `ขอเชิญหมายเลข ${prefix}${numbers.join(', ')} คุณ ${data.name} ${data.surname} ${data.station} ค่ะ`;
             console.log("ข้อความที่จะพูด:", textSpeak);
+            const popupPositionClass = data.department === 'ทันตกรรม' ? 'popup-left' : 'popup-default';
 
             $('#popupTable').html(`
-        <div class="contentPopup" id="popup">
+        <div class="contentPopup ${popupPositionClass}" id="popup">
             <div class="Name">
                 <h3 style="color: rgb(9, 87, 41);">${data.station}</h3>
                 <h3 class="text-4xl font-semibold mt-2">${data.name} ${data.surname}</h3>
